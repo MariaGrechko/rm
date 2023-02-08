@@ -20,7 +20,3 @@ class Create_Deleted_Objects_Info_File
     file.close
   end
 end
-
-# creator = Create_Deleted_Objects_Info_File.new
-# json_arr = [FileObject].map(&:to_json)
-# creator.add_to_deleted_objects_info(json_arr)
