@@ -1,16 +1,16 @@
 require 'fileutils'
 require_relative './file_object.rb'
-require_relative './create_deleted_objects_info_file.rb'
+require_relative './removed_files_tracker.rb'
 
 class RecycleBin
-  RECYCLE_BIN_PATH = File.expand_path('~/recycle_bin')
+  RECYCLE_BIN_PATH = File.expand_path('~/.recycle_bin')
 
   def initialize_bin
     if !Dir.exist?(RECYCLE_BIN_PATH)
       Dir.mkdir(RECYCLE_BIN_PATH)
       puts 'The recycle bin has just been created!'
     else
-      puts "The recycle bin already exists. You may find it in #{RECYCLE_BIN_PATH}"
+      puts 'The recycle bin already exists.'
     end
   end
 
@@ -19,10 +19,10 @@ class RecycleBin
       file = FileObject.new(file_name, Time.now, File.expand_path('.'))
       FileUtils.mv file.file_name, RECYCLE_BIN_PATH
       puts "Hopefully, the file #{file_name} is now to be found in #{RECYCLE_BIN_PATH}"
-      creator = Create_Deleted_Objects_Info_File.new
+      creator = RemovedFilesTracker.new
       json_arr = []
       json_arr << file.to_json
-      creator.add_to_deleted_objects_info(json_arr)
+      creator.add_to_files_tracker(json_arr)
       print_bin_contents
     else
       puts "No file '#{file_name}' was found in #{Dir.pwd}"
