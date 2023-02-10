@@ -1,16 +1,16 @@
 require 'fileutils'
 require_relative './file_object.rb'
 require_relative './removed_files_tracker.rb'
+require_relative './command_line.rb'
 
 class RecycleBin
   RECYCLE_BIN_PATH = File.expand_path('~/.recycle_bin')
+  @@command_line = CommandLine.new
 
   def initialize_bin
     if !Dir.exist?(RECYCLE_BIN_PATH)
       Dir.mkdir(RECYCLE_BIN_PATH)
-      puts 'The recycle bin has just been created!'
-    else
-      puts 'The recycle bin already exists.'
+      @@command_line.creation_message(true)
     end
   end
 
@@ -74,7 +74,7 @@ class RecycleBin
         when 1
           delete_file_from_bin
         else
-          puts 'Aborting program.'
+          @@command_line.aborting_program(true)
           exit
         end
       else
@@ -90,7 +90,7 @@ class RecycleBin
       when 1
         delete_file_from_bin
       else
-        puts 'Aborting program.'
+        @@command_line.aborting_program(true)
         exit
       end
     end
