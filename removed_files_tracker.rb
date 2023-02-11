@@ -12,11 +12,10 @@ FILES_TRACKER = '.files_tracker.json'
     end
   end
 
-  def add_to_files_tracker(*arr)
+  def add_to_files_tracker(*deleted_file)
     file = File.open(FILES_TRACKER, 'r')
-    arr.each do |object|
-      File.write(FILES_TRACKER, object, mode: 'w')
-    end
+    files_info = File.readlines(FILES_TRACKER)
+    File.write(FILES_TRACKER, files_info + deleted_file, mode: 'w')
     file.close
   end
 end

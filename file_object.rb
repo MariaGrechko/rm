@@ -1,7 +1,7 @@
 require 'json'
 
 class FileObject
-  attr_reader :file_name, :deletion_date, :initial_path
+  attr_accessor :file_name, :deletion_date, :initial_path
 
   def initialize(file_name, deletion_date, initial_path)
     @file_name = file_name
@@ -24,7 +24,9 @@ class FileObject
   def deserialize_log
     file = File.read('.files_tracker.json')
     removed_files_in_json = JSON.parse(file)
-    removed_files = FileObject.from_json(removed_files_in_json)
+    removed_files = FileObject.from_json(*removed_files_in_json)
     p removed_files
   end
 end
+
+# t1 = FileObject.new.deserialize_log

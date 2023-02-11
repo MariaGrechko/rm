@@ -1,16 +1,18 @@
 require 'fileutils'
 require_relative './file_object.rb'
 require_relative './removed_files_tracker.rb'
-require_relative './command_line.rb'
+require_relative './printer.rb'
+# require_relative './deserializer.rb'
 
 class RecycleBin
   RECYCLE_BIN_PATH = File.expand_path('~/.recycle_bin')
-  @@command_line = CommandLine.new
+  @@printer = Printer.new(false)
+  # @@deserializer = Deserializer.new
 
   def initialize_bin
     if !Dir.exist?(RECYCLE_BIN_PATH)
       Dir.mkdir(RECYCLE_BIN_PATH)
-      @@command_line.creation_message(true)
+      @@printer.call('The recycle bin has just been created.')
     end
   end
 
@@ -18,15 +20,21 @@ class RecycleBin
     if File.exist?(file_name)
       file = FileObject.new(file_name, Time.now, File.expand_path('.'))
       FileUtils.mv file.file_name, RECYCLE_BIN_PATH
-      puts "Hopefully, the file #{file_name} is now to be found in #{RECYCLE_BIN_PATH}"
       creator = RemovedFilesTracker.new
-      json_arr = []
-      json_arr << file.to_json
-      creator.add_to_files_tracker(json_arr)
-      print_bin_contents
+      creator.add_to_files_tracker(file.to_json)
+      return @@printer.call("#{file_name} has been moved to the recycle bin.")
+      # print_bin_contents
     else
-      puts "No file '#{file_name}' was found in #{Dir.pwd}"
+      return @@printer.call("No file '#{file_name}' was found in #{Dir.pwd}")
     end
+  end
+
+  def restore_from_bin
+    file = File.read('.files_tracker.json')
+    removed_files_in_json = JSON.parse(file)
+    p *removed_files_in_json
+    # restored_object = FileObject.new(" ", 12.12, "...")
+    # restored_object.deserialize_log
   end
 
   def delete_all_from_bin
@@ -34,7 +42,7 @@ class RecycleBin
       puts 'The recycle bin is already empty. Aborting program'
       exit
     end
-    puts 'Are you sure you want to empty the bin? The data will not be restored. Type \'yes\' to continue.'
+    puts 'Are you sure you want to empty the bin? Type \'yes\' to continue. Press any button to break.'
     confirmation = gets.chomp.downcase
     if confirmation == 'yes'
       Dir.each_child(RECYCLE_BIN_PATH) do |file_name|
@@ -44,7 +52,7 @@ class RecycleBin
       end
       puts 'The bin is now empty'
     else
-      puts 'Canceling operation.'
+      @@printer.call('Aborting the program.')
       exit
     end
   end
@@ -74,11 +82,11 @@ class RecycleBin
         when 1
           delete_file_from_bin
         else
-          @@command_line.aborting_program(true)
+          @@printer.call('Aborting the program.')
           exit
         end
       else
-        puts 'Canceling operation.'
+        @@printer.call('Aborting the program.')
         exit
       end
     end
@@ -90,7 +98,7 @@ class RecycleBin
       when 1
         delete_file_from_bin
       else
-        @@command_line.aborting_program(true)
+        @@printer.call('Aborting program.')
         exit
       end
     end
@@ -103,3 +111,8 @@ class RecycleBin
     puts '_________________________'
   end
 end
+
+recycle_bin = RecycleBin.new
+recycle_bin.initialize_bin
+file_name = gets.chomp
+recycle_bin.file_to_bin(file_name)
