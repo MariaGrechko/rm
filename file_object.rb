@@ -20,13 +20,8 @@ class FileObject
   def self.from_json(data)
     FileObject.new(data['file_name'], data['deletion_date'], data['initial_path'])
   end
-
-  def deserialize_log
-    file = File.read('.files_tracker.json')
-    removed_files_in_json = JSON.parse(file)
-    removed_files = FileObject.from_json(*removed_files_in_json)
-    p removed_files
-  end
 end
 
 # t1 = FileObject.new.deserialize_log
+# f1 = FileObject.new.to_json
+# FileObject.from_json

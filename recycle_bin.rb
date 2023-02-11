@@ -19,11 +19,9 @@ class RecycleBin
   def file_to_bin(file_name)
     if File.exist?(file_name)
       file = FileObject.new(file_name, Time.now, File.expand_path('.'))
-      FileUtils.mv file.file_name, RECYCLE_BIN_PATH
-      creator = RemovedFilesTracker.new
-      creator.add_to_files_tracker(file.to_json)
+      FileUtils.mv(file.file_name, RECYCLE_BIN_PATH)
+      RemovedFilesTracker.new.add_to_files_tracker(file)
       return @@printer.call("#{file_name} has been moved to the recycle bin.")
-      # print_bin_contents
     else
       return @@printer.call("No file '#{file_name}' was found in #{Dir.pwd}")
     end
