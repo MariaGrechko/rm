@@ -1,10 +1,9 @@
 require_relative './file_object.rb'
-require 'pry'
 
 class RemovedFilesTracker
-  FILES_TRACKER = '.files_tracker.json'
+  FILES_TRACKER = File.expand_path('~/.files_tracker.json')
 
-  def create_files_tracker
+  def setup
     if !File.exist?(FILES_TRACKER)
       initial_data = [].to_json
       File.write(FILES_TRACKER, initial_data, mode: 'w')

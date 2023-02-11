@@ -21,7 +21,3 @@ class FileObject
     FileObject.new(data['file_name'], data['deletion_date'], data['initial_path'])
   end
 end
-
-# t1 = FileObject.new.deserialize_log
-# f1 = FileObject.new.to_json
-# FileObject.from_json
