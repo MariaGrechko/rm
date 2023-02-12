@@ -4,9 +4,16 @@ require_relative './lib/commander.rb'
 
 Commander.call
 
-# TODOs for Masha
-# 1. Create setup method in recycle bin
-# 2. Move remove/restore methods to recycle bin
-# 3. Create show method in recycle bin which will show the list of files in recycle bin
-# 4. Add new commands and ARGV parsing in Commander class
-# 5. Finish restore feature
+
+# Если программа без флагов, то она просто удаляет файлы (автоматически вызывает file to bin)
+# флаг --clean, очищает корзину
+# флаг --silent, аутпуты исчезают
+# --restore (all), восстаналивает один файл(все)
+# --list - содержимое корзины
+# --help
+
+# ruby rm.rb --list
+# ruby rm.rb t1 t2 t3 --silent
+
+# --silent_mode - применяется к любой команде
+# Другие команды между собой не могут)))) Флаги в скриптах/утилитах

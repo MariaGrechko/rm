@@ -9,12 +9,20 @@ class FileObject
     @initial_path = initial_path
   end
 
+  # def restore_name
+  #   @file_name
+  # end
+
+  # def to_restore_path
+  #   @initial_path
+  # end
+
   def to_json
     {
       file_name: @file_name,
       deletion_date: @deletion_date,
       initial_path: @initial_path
-    }.to_json
+    }
   end
 
   def self.from_json(data)

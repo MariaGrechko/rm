@@ -6,7 +6,7 @@ class Initializator
     def call
       initialize_recycle_bin
       initialize_remove_files_tracker
-      setup_command_line
+      # setup_command_line
     end
 
     private
