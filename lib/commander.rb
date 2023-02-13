@@ -22,10 +22,10 @@ class Commander
       parser.on('-c', '--clean', 'Permanently deletes all data from the recycle bin.') do
         RecycleBin.delete_all_from_bin
       end
-      parser.on("-r", 'Restores user input files from the recycle bin.') do
+      parser.on('-r', 'Restores user input files from the recycle bin.') do
         RecycleBin.restore_from_bin(ARGV)
       end
-      parser.on('--restore_all', 'Restores all data from the recycle bin.') do
+      parser.on('-r_a', '--restore_all', 'Restores all data from the recycle bin.') do
         RecycleBin.restore_all_from_bin
       end
       parser.on('-h', '--help') do
